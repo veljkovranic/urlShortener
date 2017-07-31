@@ -15,6 +15,11 @@ public class Main {
         post("/shortenUrl", (request, response) -> {
             String rawUrl = request.queryParams("url");
             System.out.println("input  " + rawUrl);
+
+            if(!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://")){
+                rawUrl = "http://" + rawUrl;
+            }
+
             try {
                 UrlModel urlModel = database.createNewEntry(rawUrl);
                 response.status(200);
@@ -32,12 +37,7 @@ public class Main {
         get("/open/:url", (request, response) -> {
             String rawUrl = request.params("url");
 
-            System.out.println("rawUrl " + rawUrl);
-            System.out.println("input  " + request.ip());
-
             String requestIp = request.ip();
-
-            requestIp = "89.216.117.105";
 
             try {
                 UrlModel urlModel = database.getOriginalUrl(rawUrl);
